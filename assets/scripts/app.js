@@ -1,9 +1,31 @@
-let movies = [];
+let movies = [
+  {
+    title: "Hercules",
+    img: "https://www.cinema.de/sites/default/files/styles/schema_org/public/sync/cms3.cinema.de/imgdb/moviedb/70/4bb7b8c54dfad005defa863f04901e2a.jpeg?itok=5TXVBEE8",
+    rating: 5,
+    id: new Date().getTime().toString(),
+  },
+
+  {
+    title: "Aladdin",
+    img: "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/89DF7B0A1A6E14F82B9D91503F7FD18E24D795CD5BD5DA7AC353AEF140018106/scale?width=506&aspectRatio=2.00&format=jpeg",
+    rating: 5,
+    id: new Date().getTime().toString(),
+  },
+  {
+    title: "Shrek",
+    img: "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81zg+bAdjVS._RI_.jpg",
+    rating: 5,
+    id: new Date().getTime().toString(),
+  },
+];
 const movieList = document.getElementById("movie-list");
 
 // Storage
 const moviesStorageName = "MOVIE";
-let moviesFromLocalStorageString = localStorage.getItem(moviesStorageName);
+sessionStorage.setItem(moviesStorageName, JSON.stringify(movies));
+let moviesFromLocalStorageString = sessionStorage.getItem(moviesStorageName);
+
 // Storage
 if (Array.isArray(JSON.parse(moviesFromLocalStorageString))) {
   movies = JSON.parse(moviesFromLocalStorageString);
@@ -50,16 +72,15 @@ function createMovieItem(movie) {
   deleteBtn.addEventListener("click", (deletebuttons) => {
     deletebuttons.target.parentElement.parentElement.remove();
     movies = movies.filter((item) => item.id !== id);
-    console.log(movies)
   });
-  
+
   imgContainer.appendChild(imgItem);
   infoContainer.appendChild(titleNode);
   infoContainer.appendChild(ratingNode);
   infoContainer.appendChild(deleteBtn);
   li.appendChild(imgContainer);
   li.appendChild(infoContainer);
-  console.log(movies)
+  console.log(movies);
   return li;
 }
 
@@ -67,8 +88,8 @@ const addMovieHandler = () => {
   const titleInput = document.getElementById("title");
   const imgInput = document.getElementById("image-url");
   const ratingInput = document.getElementById("rating");
-  const newId = ratingInput + new Date().getTime().toString()
-  const ID = newId.replace(/ /g,"")
+  const newId = ratingInput + new Date().getTime().toString();
+  const ID = newId.replace(/ /g, "");
   const data = {
     id: ID,
     title: titleInput.value,
@@ -118,19 +139,19 @@ cancelBtn.addEventListener("click", closeModalHandler);
 function actionOnOffline(element) {
   if (navigator.onLine) {
   } else {
-    localStorage.setItem(moviesStorageName, JSON.stringify(element));
+    sessionStorage.setItem(moviesStorageName, JSON.stringify(element));
   }
 }
 
 if (navigator.onLine) {
   window.addEventListener("beforeunload", function (event) {
     event.preventDefault();
-    localStorage.setItem(moviesStorageName, JSON.stringify(movies));
+    sessionStorage.setItem(moviesStorageName, JSON.stringify(movies));
   });
 } else {
   window.addEventListener("beforeunload", function (event) {
     event.preventDefault();
-    localStorage.setItem(moviesStorageName, JSON.stringify(movies));
+    sessionStorage.setItem(moviesStorageName, JSON.stringify(movies));
   });
 }
 removeStupidValues(movies);
@@ -139,6 +160,3 @@ function removeStupidValues(element) {
   if (Array.isArray(element)) {
   } else element = [];
 }
-
-console.log(movieList.child);
-console.log(movies);
